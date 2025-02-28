@@ -3,7 +3,7 @@ const puppeteer = require('puppeteer');
 require('dotenv').config();
 
 const app = express();
-const PORT = 3000;
+const port = process.env.PORT || 3000;
 
 // Global değişkende en son çekilen verileri tutuyoruz.
 let scrapedData = {
@@ -21,10 +21,6 @@ let scrapedData = {
       '--no-zygote',
     ], // Chrome için gerekli izinleri veriyoruz.
     // headless: true
-    executablePath:
-      process.env.NODE_ENV === "production"
-        ? process.env.PUPPETEER_EXECUTABLE_PATH
-        : puppeteer.executablePath(),
   });
   const page = await browser.newPage();
 
@@ -150,6 +146,6 @@ app.get('/api/data', (req, res) => {
   res.json(scrapedData);
 });
 
-app.listen(PORT, () => {
-  console.log(`Sunucu http://localhost:${PORT} adresinde çalışıyor`);
+app.listen(port, () => {
+  console.log(`Sunucu http://localhost:${port} adresinde çalışıyor`);
 });
