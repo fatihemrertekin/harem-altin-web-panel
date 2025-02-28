@@ -1,5 +1,7 @@
 const express = require('express');
 const puppeteer = require('puppeteer');
+require('dotenv').config();
+
 const app = express();
 const PORT = 3000;
 
@@ -11,7 +13,19 @@ let scrapedData = {
 
 (async () => {
   // Puppeteer'ı headless modda başlatıyoruz.
-  const browser = await puppeteer.launch({ headless: true });
+  const browser = await puppeteer.launch({ 
+    args: [
+      '--no-sandbox',
+      '--disable-setuid-sandbox',
+      '--single-process',
+      '--no-zygote',
+    ], // Chrome için gerekli izinleri veriyoruz.
+    // headless: true
+    executablePath:
+      process.env.NODE_ENV === "production"
+        ? process.env.PUPPETEER_EXECUTABLE_PATH
+        : puppeteer.executablePath(),
+  });
   const page = await browser.newPage();
 
   // Hedef sayfayı ziyaret ediyoruz.
