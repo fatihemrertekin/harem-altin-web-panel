@@ -6,3 +6,5 @@ COPY package*.json ./
 RUN npm ci
 COPY . .
 CMD [ "node", "index.js" ]
+
+# bu dosya aşşırı önemli render.com'a deploy etmek için
