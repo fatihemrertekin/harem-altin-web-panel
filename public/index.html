@@ -235,12 +235,39 @@
       object-fit: cover;
       /* Resim oranını koruyarak doldur */
     }
+
+    @media (max-width: 992px) {
+      body {
+        font-size: 14px;
+        /* Genel yazı boyutu */
+      }
+
+      .table-title {
+        font-size: 2rem;
+        /* Tablo başlığı boyutu */
+      }
+
+      table thead th {
+        font-size: 1.2rem;
+        /* Tablodaki metin boyutu */
+      }
+
+      table tbody td {
+        font-size: 1rem;
+        /* Tablodaki metin boyutu */
+      }
+
+      table tbody tr td {
+        padding: 0.8rem !important;
+        /* Tablodaki metin boyutu */
+      }
+    }
   </style>
 </head>
 
 <body>
   <!-- ÜST KISIM: Logo - Altın Slider - Saat -->
-  <div class="top-bar">
+  <div class="top-bar d-none d-sm-flex">
     <!-- Sol tarafta logo -->
     <div class="logo">
       <img src="logo.avif" alt="logo" />
@@ -259,7 +286,7 @@
 
   <!-- ALT KISIM: Altın Fiyatları Tablosu -->
   <div class="all-container row">
-    <div class="altin-fiyat-kolon col-9">
+    <div class="altin-fiyat-kolon col-12 col-lg-9">
       <div class="row">
         <div class="col-12">
           <div class="card shadow">
@@ -283,8 +310,7 @@
       </div>
     </div>
 
-    <div class="image-kolon col-3">
-
+    <div class="image-kolon col-3 d-none d-lg-flex">
       <video src="vid.mp4" autoplay loop muted></video></video>
     </div>
   </div>
@@ -429,7 +455,7 @@
     // İlk veriyi çek
     fetchData();
     // Her 5 saniyede bir verileri güncelle
-    setInterval(fetchData, 30000);
+    setInterval(fetchData, 20000);
   </script>
 </body>
 
