@@ -381,7 +381,7 @@
       slider.innerHTML = "";
 
       if (!altinVeriler || altinVeriler.length === 0) {
-        slider.textContent = "Veri bulunamadı.";
+        slider.textContent = "Veri bulunamadı lütfen sayfayı yenileyin ve tekrar deneyin.";
         return;
       }
 
@@ -445,7 +445,7 @@
         const tr = document.createElement("tr");
         const td = document.createElement("td");
         td.setAttribute("colspan", fields.length);
-        td.textContent = "Veri bulunamadı.";
+        td.textContent = "Veri bulunamadı lütfen sayfayı yenileyin ve tekrar deneyin.";
         td.classList.add("text-center");
         tr.appendChild(td);
         tableBody.appendChild(tr);
