@@ -129,7 +129,7 @@ function formatPrice(num) {
           switch (row.isim.toUpperCase()) {
             case "24 AYAR":
               alisNum = alisNum;
-              satisNum = hasSatis * 1.012;
+              satisNum = hasSatis * 1.02;
               break;
             case "22 AYAR":
               alisNum = alisNum;
@@ -163,6 +163,7 @@ function formatPrice(num) {
             isim: row.isim,
             alis: formatPrice(alisNum),
             satis: formatPrice(satisNum),
+            kkSatis: formatPrice(satisNum * 1.04),
           };
         });
 
@@ -175,18 +176,26 @@ function formatPrice(num) {
         if (nameA === "22 AYAR" && nameB === "24 AYAR") return 1;
         return 0;
       });
-      
+
       // "REŞAT ALTIN" ve "HAMID ALTIN" verilerini, "TAM ALTIN" satırının hemen sonrasına ekleyelim.
       if (hasAlis && hasSatis) {
         const resatAltin = {
           isim: "REŞAT ALTIN",
           alis: formatPrice(hasAlis * 6.63),
           satis: formatPrice(hasSatis * 6.95),
+          kkSatis: formatPrice((hasSatis * 6.95) * 1.04),
         };
         const hamidAltin = {
-          isim: "HAMİD ALTIN",
+          isim: "HAMİT ALTIN",
           alis: formatPrice(hasAlis * 6.6),
           satis: formatPrice(hasSatis * 6.8),
+          kkSatis: formatPrice((hasSatis * 6.8) * 1.04),
+        };
+        const ataLira = {
+          isim: "ATA LİRA",
+          alis: formatPrice(hasAlis * 6.6),
+          satis: formatPrice(hasSatis * 6.8),
+          kkSatis: formatPrice((hasSatis * 6.8) * 1.04),
         };
 
         // "TAM ALTIN" satırının indeksini bulalım
@@ -209,7 +218,7 @@ function formatPrice(num) {
         // "HAMID ALTIN" için; eğer "REŞAT ALTIN" eklenmişse onun hemen sonrasına, aksi takdirde TAM ALTIN'ın sonrasına ekleyelim
         if (
           !finalAltinVeriler.some(
-            (item) => item.isim.toUpperCase() === "HAMID ALTIN"
+            (item) => item.isim.toUpperCase() === "HAMİT ALTIN"
           )
         ) {
           const resatIndex = finalAltinVeriler.findIndex(
@@ -221,6 +230,22 @@ function formatPrice(num) {
             finalAltinVeriler.splice(tamIndex + 1, 0, hamidAltin);
           } else {
             finalAltinVeriler.push(hamidAltin);
+          }
+        }
+
+        // "ATA LİRA" verisini, HAMİT ALTIN'ın hemen sonrasına ekleyelim
+        const hamidIndex = finalAltinVeriler.findIndex(
+          (item) => item.isim.toUpperCase() === "HAMİT ALTIN"
+        );
+        if (
+          !finalAltinVeriler.some(
+            (item) => item.isim.toUpperCase() === "ATA LİRA"
+          )
+        ) {
+          if (hamidIndex !== -1) {
+            finalAltinVeriler.splice(hamidIndex + 1, 0, ataLira);
+          } else {
+            finalAltinVeriler.push(ataLira);
           }
         }
       }

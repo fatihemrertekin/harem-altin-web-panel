@@ -295,9 +295,10 @@
               <table class="table table-bordered" id="altinTable">
                 <thead>
                   <tr>
-                    <th>İSİM</th>
-                    <th>ALIŞ FİYATI</th>
-                    <th>SATIŞ FİYATI</th>
+                    <th>ÜRÜN</th>
+                    <th>ALIŞ</th>
+                    <th>SATIŞ</th>
+                    <th>K. KARTI SATIŞ</th>
                   </tr>
                 </thead>
                 <tbody class="text-wrapper">
@@ -369,7 +370,7 @@
 
         // altinVeriler hem slider hem tablo için kullanılıyor
         updateAltinSlider(data.altinVeriler);
-        updateAltinTable("altinTable", data.altinVeriler, ["isim", "alis", "satis"]);
+        updateAltinTable("altinTable", data.altinVeriler, ["isim", "alis", "satis", "kkSatis"]);
       } catch (error) {
         console.error("Veri çekme hatası:", error);
       }
@@ -434,9 +435,13 @@
             // Alış kırmızı, Satış yeşil
             if (field.toLowerCase().includes("alis")) {
               td.classList.add("text-danger");
-            } else if (field.toLowerCase().includes("satis")) {
+            } else if (field.toLowerCase() === "satis") {
               td.classList.add("text-success");
+            } else if (field.toLowerCase() === "kksatis" || field.toLowerCase().includes("kk")) {
+              td.style.color = "goldenrod";
+              td.style.fontWeight = "bold";
             }
+
             tr.appendChild(td);
           });
           tableBody.appendChild(tr);
@@ -455,7 +460,7 @@
     // İlk veriyi çek
     fetchData();
     // Her 5 saniyede bir verileri güncelle
-    setInterval(fetchData, 20000);
+    setInterval(fetchData, 3000);
   </script>
 </body>
 
