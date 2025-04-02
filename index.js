@@ -256,8 +256,8 @@ function formatPrice(num) {
     }
   };
 
-  await fetchData();
-  setInterval(fetchData, 60000);
+  // await fetchData();  Yayına alınca Çalıştırılacak
+  // setInterval(fetchData, 60000);  Yayına alınca Çalıştırılacak
 
   // Sunucuyu kapatmıyoruz; Puppeteer arka planda çalışmaya devam etsin
 })();
