@@ -1,96 +1,467 @@
 <!DOCTYPE html>
 <html lang="tr">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Yapım Aşamasında</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Canlı Fiyatlar</title>
+  <link rel="icon" href="logo.svg" type="image/svg+xml">
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" />
   <style>
-    * {
-      box-sizing: border-box;
+    :root {
+      --acikkrem: #FAF6E9;
+      --krem: #ECE8D9;
+      --beyaz: #FFFDF6;
+      --koyu: #494949;
+    }
+
+    /* GENEL SAYFA STİLİ */
+    html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+
+
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background-color: var(--beyaz);
+      /* Dijital pano hissi için siyah arka plan */
+      color: #fff;
+      /* Yazılar beyaz */
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      font-weight: bolder;
+    }
+
+    /* ÜST KISIM: Logo - Altın Slider - Saat */
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 30px 20px;
+      background-color: var(--acikkrem);
+      width: 100%;
+      ;
+    }
+
+    /* Sol tarafta logo */
+    .top-bar .logo img {
+      max-height: 80px;
+      background-color: var(--koyu);
+      border-radius: 5px;
+    }
+
+    /* Orta kısım: Altın Fiyatları Slider */
+    .altin-slider-container {
+      flex: 1;
+      margin: 0 20px;
+      overflow: hidden;
+      /* Yatay kaydırma alanı gizli */
+    }
+
+    .altin-slider {
+      display: flex;
+      gap: 30px;
+      animation: scrollLeft 15s linear infinite;
+      /* İsteğe bağlı otomatik kaydırma */
+    }
+
+    .altin-item {
+      min-width: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-right: 30px;
+      border-right: 2px solid var(--krem);
+    }
+
+    .altin-name {
+      font-weight: 600;
+      font-size: 1.1rem;
+      color: var(--koyu);
+      margin-right: 10px;
+      /* Altın sarısı */
+    }
+
+    .altin-prices {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      font-size: 1rem;
+    }
+
+    .altin-prices .text-danger {
+      font-weight: 700;
+      /* Alış kırmızı */
+    }
+
+    .altin-prices .text-success {
+      font-weight: 700;
+      /* Satış yeşil */
+    }
+
+    /* Otomatik yatay scroll animasyonu (isteğe bağlı) */
+    @keyframes scrollLeft {
+      0% {
+        transform: translateX(0);
+      }
+
+      100% {
+        transform: translateX(-50%);
+      }
+    }
+
+    /* Sağ tarafta saat */
+    #clock {
+      font-size: 1.5rem;
+      font-weight: 500;
+      color: var(--koyu);
+      min-width: 180px;
+      text-align: right;
+      font-weight: bold;
+    }
+
+    .row {
+      width: 100%;
+      margin: 0;
+      /* otomatik margin'i kaldırın */
+      padding: 0;
+    }
+
+    .col-12 {
+      padding: 0;
+    }
+
+    /* ALT KISIM: Altın Fiyatları Tablosu */
+    .table-container {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      /* otomatik margin'i kaldırın */
+      padding: 0;
+    }
+
+    .table-title {
+      background-color: var(--krem);
+      color: var(--koyu);
+      text-align: center;
+      font-weight: bold;
+      font-size: 2.5rem;
+      padding: 20px;
+    }
+
+    .card {
+      background-color: var(--acikkrem);
+      margin-bottom: 20px;
+      border: none;
+
+    }
+
+    .card-body {
+      padding: 0;
+    }
+
+    table {
+      color: var(--koyu);
+      font-size: 1.6rem;
+      border-color: var(--beyaz) !important;
+      width: 100%;
+      table-layout: fixed;
+    }
+
+    table thead {
+      background-color: var(--krem);
+      font-size: 1.6rem;
+    }
+
+    table thead th {
+      color: var(--koyu);
+    }
+
+    table tbody tr:hover {
+      background-color: var(--krem);
+    }
+
+    table td,
+    table th {
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    table td {
+      padding: 1% 0 !important;
+    }
+
+    table .text-wrapper {
+      color: var(--koyu);
+      font-size: 1.6rem;
+    }
+
+    /* Alış / Satış renkleri */
+    .text-danger {
+      color: #b12c2c !important;
+    }
+
+    .text-success {
+      color: #20a120 !important;
+    }
+
+    .all-container.row {
+      display: flex;
+      align-items: stretch;
+      /* Tüm sütunlar eşit yükseklik alsın */
       margin: 0;
       padding: 0;
     }
 
-    body {
-      font-family: 'Georgia', 'Times New Roman', serif;
-      background-color: #f5f0eb;
-      color: #2f2f2f;
+    .image-kolon {
       display: flex;
-      justify-content: center;
-      align-items: center;
+      flex-direction: column;
+      gap: 10px;
+      /* Resimler arasında isteğe bağlı boşluk */
+      /* Kolonun yüksekliği otomatik olarak yanındaki kolonla eşitlenecek */
+    }
+
+    .image-kolon img,
+    .image-kolon video {
+      flex: 1;
+      /* Her resim, kolon yüksekliğinin eşit kısmını kaplasın */
       height: 100vh;
-      text-align: center;
+      width: 100%;
+      /* Resimler sütun genişliğini doldursun */
+      object-fit: cover;
+      /* Resim oranını koruyarak doldur */
     }
 
-    .container {
-      padding: 40px;
-      border-radius: 12px;
-      background-color: #fff;
-      border: 1px solid #e2dcd3;
-      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
-      max-width: 600px;
-      width: 90%;
-    }
-
-    h1 {
-      font-size: 2.8rem;
-      color: #5c2e00;
-      margin-bottom: 20px;
-      font-weight: normal;
-    }
-
-    p {
-      font-size: 1.1rem;
-      line-height: 1.6;
-      color: #444;
-      margin-bottom: 30px;
-    }
-
-    a {
-      color: #888;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    .loader {
-      border: 6px solid #eee;
-      border-top: 6px solid #5c2e00;
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      animation: spin 1s linear infinite;
-      margin: auto;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    footer {
-      margin-top: 40px;
-      font-size: 0.9rem;
-      color: #888;
-      margin-bottom: 10px;
-    }
-
-    @media (max-width: 600px) {
-      h1 {
-        font-size: 2rem;
+    @media (max-width: 992px) {
+      body {
+        font-size: 14px;
+        /* Genel yazı boyutu */
       }
-      p {
+
+      .table-title {
+        font-size: 2rem;
+        /* Tablo başlığı boyutu */
+      }
+
+      table thead th {
+        font-size: 1.2rem;
+        /* Tablodaki metin boyutu */
+      }
+
+      table tbody td {
         font-size: 1rem;
+        /* Tablodaki metin boyutu */
+      }
+
+      table tbody tr td {
+        padding: 0.8rem !important;
+        /* Tablodaki metin boyutu */
       }
     }
   </style>
 </head>
+
 <body>
-  <div class="container">
-    <h1>Yapım Aşamasında</h1>
-    <p>Canlı kur panomuzu sizler için yeniliyoruz.<br> En kısa sürede görüşmek üzere.</p>
-    <div class="loader"></div>
-    <footer>&copy; 2025 Aktıp Kuyumculuk <br></footer>
-    <a href="https://www.bartinmedya.com/" target="_blank">BARTIN MEDYA</a>
+  <!-- ÜST KISIM: Logo - Altın Slider - Saat -->
+  <div class="top-bar d-none d-sm-flex">
+    <!-- Sol tarafta logo -->
+    <div class="logo">
+      <img src="logo.avif" alt="logo" />
+    </div>
+
+    <!-- Orta kısım: Altın Fiyatları Slider -->
+    <div class="altin-slider-container">
+      <div class="altin-slider" id="altinSlider">
+        <!-- JavaScript ile doldurulacak -->
+      </div>
+    </div>
+
+    <!-- Sağ tarafta saat -->
+    <div id="clock"></div>
   </div>
+
+  <!-- ALT KISIM: Altın Fiyatları Tablosu -->
+  <div class="all-container row">
+    <div class="altin-fiyat-kolon col-12 col-lg-9">
+      <div class="row">
+        <div class="col-12">
+          <div class="card shadow">
+            <div class="table-title">GÜNCEL ALTIN FİYATLARI</div>
+            <div class="card-body table-responsive">
+              <table class="table table-bordered" id="altinTable">
+                <thead>
+                  <tr>
+                    <th>ÜRÜN</th>
+                    <th>ALIŞ</th>
+                    <th>SATIŞ</th>
+                    <th>K. KARTI SATIŞ</th>
+                  </tr>
+                </thead>
+                <tbody class="text-wrapper">
+                  <!-- Veriler burada görünecek -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="image-kolon col-3 d-none d-lg-flex">
+      <video src="vid.mp4" autoplay loop muted></video>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // ====================== SAAT GÜNCELLEME ======================
+    function updateClock() {
+      const clockElement = document.getElementById("clock");
+      const now = new Date();
+      const day = now.getDate();
+      const monthIndex = now.getMonth();
+      const weekdayIndex = now.getDay();
+      const hours = now.getHours().toString().padStart(2, "0");
+      const minutes = now.getMinutes().toString().padStart(2, "0");
+      const seconds = now.getSeconds().toString().padStart(2, "0");
+
+      const months = [
+        "Ocak",
+        "Şubat",
+        "Mart",
+        "Nisan",
+        "Mayıs",
+        "Haziran",
+        "Temmuz",
+        "Ağustos",
+        "Eylül",
+        "Ekim",
+        "Kasım",
+        "Aralık"
+      ];
+      const weekdays = [
+        "Pazar",
+        "Pazartesi",
+        "Salı",
+        "Çarşamba",
+        "Perşembe",
+        "Cuma",
+        "Cumartesi"
+      ];
+
+      const formattedTime = `${day} ${months[monthIndex]
+        } ${weekdays[weekdayIndex]} <br> ${hours}:${minutes}:${seconds}`;
+      clockElement.innerHTML = formattedTime;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // ====================== VERİ ÇEKME ======================
+    async function fetchData() {
+      try {
+        const response = await fetch("/api/data"); // API'den verileri çek
+        const data = await response.json();
+
+        // altinVeriler hem slider hem tablo için kullanılıyor
+        updateAltinSlider(data.altinVeriler);
+        updateAltinTable("altinTable", data.altinVeriler, ["isim", "alis", "satis", "kkSatis"]);
+      } catch (error) {
+        console.error("Veri çekme hatası:", error);
+      }
+    }
+
+    // ====================== ALTIN SLIDER GÜNCELLEME ======================
+    function updateAltinSlider(altinVeriler) {
+      const slider = document.getElementById("altinSlider");
+      slider.innerHTML = "";
+
+      if (!altinVeriler || altinVeriler.length === 0) {
+        slider.textContent = "Veri bulunamadı lütfen sayfayı yenileyin ve tekrar deneyin.";
+        return;
+      }
+
+      altinVeriler.forEach((item) => {
+        const { isim, alis, satis } = item;
+
+        // Altın item container
+        const altinItem = document.createElement("div");
+        altinItem.classList.add("altin-item");
+
+        // Sol kısım: İsim
+        const nameDiv = document.createElement("div");
+        nameDiv.classList.add("altin-name");
+        nameDiv.textContent = isim || "";
+
+        // Sağ kısım: Alış (üst), Satış (alt)
+        const pricesDiv = document.createElement("div");
+        pricesDiv.classList.add("altin-prices");
+
+        const alisSpan = document.createElement("span");
+        alisSpan.textContent = alis || "";
+        alisSpan.classList.add("text-danger"); // Alış => kırmızı
+
+        const satisSpan = document.createElement("span");
+        satisSpan.textContent = satis || "";
+        satisSpan.classList.add("text-success"); // Satış => yeşil
+
+        pricesDiv.appendChild(alisSpan);
+        pricesDiv.appendChild(satisSpan);
+
+        altinItem.appendChild(nameDiv);
+        altinItem.appendChild(pricesDiv);
+
+        slider.appendChild(altinItem);
+      });
+    }
+
+    // ====================== ALTIN TABLOSU GÜNCELLEME ======================
+    function updateAltinTable(tableId, rows, fields) {
+      const tableBody = document.querySelector(`#${tableId} tbody`);
+      tableBody.innerHTML = "";
+
+      if (rows && rows.length > 0) {
+        rows.forEach((row) => {
+          const tr = document.createElement("tr");
+          fields.forEach((field) => {
+            const td = document.createElement("td");
+            td.textContent = row[field] || "";
+
+            // Alış kırmızı, Satış yeşil
+            if (field.toLowerCase().includes("alis")) {
+              td.classList.add("text-danger");
+            } else if (field.toLowerCase() === "satis") {
+              td.classList.add("text-success");
+            } else if (field.toLowerCase() === "kksatis" || field.toLowerCase().includes("kk")) {
+              td.style.color = "goldenrod";
+              td.style.fontWeight = "bold";
+            }
+
+            tr.appendChild(td);
+          });
+          tableBody.appendChild(tr);
+        });
+      } else {
+        const tr = document.createElement("tr");
+        const td = document.createElement("td");
+        td.setAttribute("colspan", fields.length);
+        td.textContent = "Veri bulunamadı lütfen sayfayı yenileyin ve tekrar deneyin.";
+        td.classList.add("text-center");
+        tr.appendChild(td);
+        tableBody.appendChild(tr);
+      }
+    }
+
+    // İlk veriyi çek
+    fetchData();
+    // Her 5 saniyede bir verileri güncelle
+    setInterval(fetchData, 3000);
+  </script>
 </body>
+
 </html>
