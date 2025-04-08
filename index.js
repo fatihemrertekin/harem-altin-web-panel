@@ -137,15 +137,15 @@ function formatPrice(num) {
               break;
             case "ÇEYREK ALTIN":
               alisNum = hasAlis * 1.6;
-              satisNum = hasSatis * 1.64;
+              satisNum = hasSatis * 1.65;
               break;
             case "YARIM ALTIN":
               alisNum = hasAlis * 3.2;
-              satisNum = hasSatis * 3.28;
+              satisNum = hasSatis * 3.3;
               break;
             case "TAM ALTIN":
               alisNum = hasAlis * 6.4;
-              satisNum = hasSatis * 6.56;
+              satisNum = hasSatis * 6.6;
               break;
             case "GREMSE ALTIN":
               alisNum = hasAlis * 16;
