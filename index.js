@@ -24,6 +24,7 @@ function formatPrice(num) {
   return parts.join(",");
 }
 
+// Puppeteer'ı başlatırken protocolTimeout değerini artırdık ve headless ayarını güncelledik.
 const initializePuppeteer = async () => {
   try {
     if (browser) await browser.close();
@@ -34,12 +35,24 @@ const initializePuppeteer = async () => {
         "--single-process",
         "--no-zygote",
       ],
-      headless: "shell",
+      headless: true,                // "shell" yerine true kullanıldı (standart headless mod)
+      protocolTimeout: 30000,          // 30 saniyeye çıkarıldı. (Varsayılan süre yetersiz kalıyorsa)
     });
     page = await browser.newPage();
+    
+    // Eğer sayfa kapanmışsa ya da oluşturulmamışsa, yeniden deniyoruz
+    if (!page || page.isClosed()) {
+      page = await browser.newPage();
+    }
+    
     await page.goto("https://canlipiyasalar.haremaltin.com/", {
       waitUntil: "networkidle2",
       timeout: 0,
+    });
+    
+    // Sayfa hata durumlarını dinlemek için ek event listener
+    page.on("error", (err) => {
+      console.error("Sayfa hatası:", err);
     });
   } catch (err) {
     console.error("Puppeteer başlatma hatası:", err);
@@ -48,7 +61,10 @@ const initializePuppeteer = async () => {
 
 const fetchData = async () => {
   try {
-    if (!page) await initializePuppeteer();
+    // Eğer page tanımlı değilse veya kapalıysa, yeniden başlatıyoruz
+    if (!page || page.isClosed()) {
+      await initializePuppeteer();
+    }
 
     const altinVeriler = await page.$$eval(
       "table.table:nth-of-type(1) tr",
@@ -126,11 +142,9 @@ const fetchData = async () => {
 
         switch (row.isim.toUpperCase()) {
           case "24 AYAR":
-            alisNum = alisNum;
             satisNum = hasSatis * 1.02;
             break;
           case "22 AYAR":
-            alisNum = alisNum;
             satisNum = hasSatis * 0.945;
             break;
           case "ÇEYREK ALTIN":
@@ -239,6 +253,7 @@ const fetchData = async () => {
     scrapedData.altinVeriler = finalAltinVeriler;
   } catch (err) {
     console.error("Veri çekme hatası:", err);
+    // Hata durumunda Puppeteer'ı yeniden başlatarak target closed hatasını aşmayı deniyoruz.
     await initializePuppeteer();
   }
 };
